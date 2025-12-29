@@ -12,14 +12,14 @@ class OllamaClient(BaseLLMClient):
         self.config = config
         self.api_url = f"{config.base_url.rstrip('/')}/api/generate"
 
-    async def aclassify(self, text: str, system_prompt: str) -> Dict[str, Any]:
+    async def aclassify(self, text: str, system_prompt: str, schema: Dict[str, Any] = None) -> Dict[str, Any]:
         prompt = f"Comment: {text}\n\nClassify this comment."
         payload = {
             "model": self.config.model,
             "prompt": prompt,
             "system": system_prompt,
             "stream": False,
-            "format": "json",
+            "format": schema if schema else "json",
             "options": {
                 "temperature": self.config.temperature,
                 "top_p": self.config.top_p,
@@ -39,11 +39,7 @@ class OllamaClient(BaseLLMClient):
                     
                     try:
                         result = json.loads(response_text)
-                        # Normalize keys
-                        return {
-                            "category": result.get("category", "unclassified"),
-                            "reasoning": result.get("reasoning", "")
-                        }
+                        return result
                     except json.JSONDecodeError:
                         logger.error(f"Failed to decode JSON response: {response_text}")
                         return {"category": "unclassified", "reasoning": "JSON Decode Error"}

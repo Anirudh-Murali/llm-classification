@@ -10,6 +10,7 @@ from ..llm_clients.base import BaseLLMClient
 from ..llm_clients.ollama import OllamaClient
 from .prompt_manager import PromptManager
 from .text_utils import get_text_quality_issue
+from ..models.response import ClassificationResponse
 
 logger = logging.getLogger(__name__)
 
@@ -51,21 +52,27 @@ class ClassificationOrchestrator:
         quality_issue = get_text_quality_issue(text)
         
         if quality_issue:
-            # Skip LLM, return with null classification
-            logger.debug(f"Skipping classification due to: {quality_issue}")
+            # ... skip logic ...
             return {
                 **row.to_dict(),
                 "grievance_category": None,
-                "reasoning": f"skipped_{quality_issue}"
+                "reasoning": f"skipped_{quality_issue}",
+                "language": None,
+                "translation": None
             }
 
         async with self.semaphore:
-            result = await self.llm_client.aclassify(text, self.system_prompt)
+            # Get JSON schema from Pydantic model
+            schema = ClassificationResponse.model_json_schema()
+            result = await self.llm_client.aclassify(text, self.system_prompt, schema=schema)
+            # print(f"DEBUG LLM RESULT: {result}")
         
         return {
             **row.to_dict(),
             "grievance_category": result.get("category"),
-            "reasoning": result.get("reasoning")
+            "reasoning": result.get("reasoning"),
+            "language": result.get("language"),
+            "translation": result.get("translation")
         }
 
     async def run(self):

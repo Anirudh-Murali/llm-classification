@@ -7,3 +7,5 @@ class GrievanceRow(BaseModel):
     original_data: Dict[str, Any]
     category: Optional[str] = None
     reasoning: Optional[str] = None
+    language: Optional[str] = None
+    translation: Optional[str] = None
