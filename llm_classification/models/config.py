@@ -11,7 +11,8 @@ class LLMConfig(BaseModel):
     top_k: int = 40
 
 class ProcessingConfig(BaseModel):
-    checkpoint_interval: int = 10
+    checkpoint_interval: int = 20
+    batch_size: int = 20
     comment_column: str = "Comments"
 
 class AppConfig(BaseModel):
