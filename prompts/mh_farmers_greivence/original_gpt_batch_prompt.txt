@@ -1,0 +1,173 @@
+You are given an Excel file containing farmer grievance comments.
+
+Your task is STRICTLY LIMITED to:
+1) Data cleaning
+2) Character encoding correction
+3) COMPLETE literal translation into English
+4) Keyword-based grievance bucketing (rule-based only)
+
+You MUST NOT infer intent, sentiment, or meaning beyond:
+- literal translation
+- direct keyword matching
+
+Follow the steps EXACTLY in the order below.
+
+────────────────────────
+STEP 1 — Identify Comment Column
+────────────────────────
+- Automatically detect the column that contains farmer grievance text.
+- Typical names may include: comment, remarks, grievance, feedback (English or Marathi).
+- If multiple candidate columns exist, choose the column with the maximum number of non-null text rows.
+
+────────────────────────
+STEP 2 — Remove Blank Entries
+────────────────────────
+- Delete rows where the grievance/comment cell is:
+  - NULL
+  - Empty string
+  - Whitespace-only
+- Do NOT modify any remaining rows.
+
+────────────────────────
+STEP 3 — Fix Encoding Errors (MANDATORY)
+────────────────────────
+- Detect mojibake caused by UTF-8 text being mis-decoded as Latin-1 or Windows-1252.
+- Reverse the encoding by:
+  - Treating the displayed string as Latin-1 bytes
+  - Decoding those bytes back into UTF-8
+- Apply this step to ALL rows.
+- If a row is already readable, leave it unchanged.
+
+────────────────────────
+STEP 4 — Language Normalisation & Translation
+────────────────────────
+- After encoding correction, detect script:
+  - Devanagari (U+0900–U+097F) → Marathi
+  - Roman → English
+- If Marathi is detected:
+  - Translate the FULL text into English.
+  - Translation must be:
+    - Literal
+    - Complete
+    - Meaning-preserving
+    - Grammatically readable
+- This applies EVEN IF the text is long, compound, or multi-clause.
+
+You ARE ALLOWED to:
+- Reorder words strictly to preserve meaning
+- Resolve grammar required for correct translation
+
+You are NOT ALLOWED to:
+- Summarise
+- Shorten
+- Infer intent
+- Add explanations
+- Change factual meaning
+
+────────────────────────
+STEP 5 — Raw English Translation Rules
+────────────────────────
+- Preserve exactly:
+  - Numbers
+  - Units (days, hectare, amount, etc.)
+  - Scheme names
+  - Object names (sprinkler, drip irrigation, Aadhaar, bank, survey number)
+  - Login IDs, passwords, reference numbers
+- Keep mixed English words as-is.
+
+────────────────────────
+STEP 6 — Keyword-Based Bucketing (RULE-BASED ONLY)
+────────────────────────
+After translation, assign EACH comment to ONE bucket based ONLY on
+direct keyword or phrase matching from the translated English text.
+
+DO NOT infer or guess.
+DO NOT assign multiple buckets.
+If multiple buckets match, choose the FIRST bucket in the order below.
+
+Bucket 1 — System / Portal Issues
+Match if comment contains ANY of:
+Portal not working, Website not opening, App crash, Login issue, OTP not received,
+Unable to submit application, Submit button not working, Page not loading,
+Session expired, Technical error shown, Server error, Internal error,
+Something went wrong, Form not saving, Data not saved, Application stuck,
+Upload failed, Document not uploaded, Attachment error, PDF not accepted,
+File size issue, File format issue, Eligible component not visible,
+Subsidy option missing, Scheme option missing, Wrong scheme shown,
+Aadhaar not seeded, Aadhaar mismatch, Aadhaar verification failed,
+Bank account mismatch, IFSC error, Account number incorrect,
+NPCI mapping failed, Duplicate application error,
+Already applied message, Application rejected as duplicate,
+Status not updated, Approved but not visible, Approval not reflecting,
+Data validation error
+
+Bucket 2 — Departmental Process Delays
+Payment delayed, Subsidy not received, Amount not credited, Money not received,
+Benefit pending, Fund pending, Treasury pending, Payment under process,
+Verification pending, Field verification pending, Panchanama not done,
+Inspection pending, Officer visit not done, File pending at Taluka,
+File pending at District, Approval pending, Signature pending,
+Officer not approving, Work pending for long time,
+No action taken, Delay from department
+
+Bucket 3 — System–Department Coordination Issues
+Approved but benefit not received, System shows approved but no payment,
+Status mismatch, Status different in portal and office,
+Treasury payment not reflected, Backend not updated,
+Data not synced, Integration issue,
+7/12 corrected but not reflected,
+KYC updated but not reflecting,
+Bank details updated but old data showing,
+Duplicate application marked wrongly,
+Application stuck due to backend issue,
+Data mismatch between systems
+
+Bucket 4 — Information & Communication Gaps
+How to apply, Application process not known,
+Which documents required, Eligibility criteria not clear,
+Am I eligible, Scheme details not known,
+Status not known, No update received,
+No SMS received, No message received,
+No confirmation received, No rejection reason shown,
+Where to contact, Helpline not responding, Guidance required
+
+Bucket 5 — Governance / Policy-Level Issues
+Officer misbehaviour, Corruption complaint, Bribe demanded,
+Favoritism, Discrimination, Intentional delay,
+Harassment by officer, Threatened by staff,
+Policy issue, Eligibility rule unclear,
+Land ownership dispute, Joint land issue,
+Name mismatch in land record,
+Wrong rejection, Appeal request,
+Inquiry requested, Disciplinary action requested
+
+If NONE of the keywords match, assign:
+Bucket = "Unclassified (No Keyword Match)"
+
+────────────────────────
+STEP 7 — Output Structure
+────────────────────────
+Create a NEW Excel sheet named: English_Comments
+
+The sheet must contain EXACTLY these columns:
+1) comment_raw_original
+2) comment_raw_fixed_encoding
+3) comment_english_raw
+4) grievance_bucket
+
+No additional columns are permitted.
+
+────────────────────────
+STEP 8 — Data Integrity Rules
+────────────────────────
+- 100% of non-blank rows must have English translation.
+- 100% of rows must have a bucket.
+- No row may be dropped after STEP 2.
+
+────────────────────────
+STEP 9 — Final Output
+────────────────────────
+- Provide a downloadable Excel file.
+- Do NOT include explanations, summaries, or analysis.
+
+Violation of any step above is considered an incorrect output.

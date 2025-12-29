@@ -1,0 +1,13 @@
+Definition: Issues where the system status and the physical/office reality are out of sync, or where backend data updates are not reflected in the portal.
+
+Keywords:
+Approved but benefit not received, System shows approved but no payment,
+Status mismatch, Status different in portal and office,
+Treasury payment not reflected, Backend not updated,
+Data not synced, Integration issue,
+7/12 corrected but not reflected,
+KYC updated but not reflecting,
+Bank details updated but old data showing,
+Duplicate application marked wrongly,
+Application stuck due to backend issue,
+Data mismatch between systems

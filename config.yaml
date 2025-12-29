@@ -1,0 +1,19 @@
+input_file: "data/sample.csv"
+output_file: "data/output_classified.csv"
+input_encoding: "utf-8"
+output_encoding: "utf-8-sig"  # BOM for Excel compatibility
+prompt_folder: "prompts/mh_farmers_greivence"
+
+llm:
+  provider: "ollama"
+  model: "gemma3:12b"
+  base_url: "http://localhost:11434"
+  max_concurrency: 3
+  timeout: 60
+  temperature: 0.0
+  top_p: 1.0
+  top_k: 40
+
+processing:
+  checkpoint_interval: 6
+  comment_column: "Comments"

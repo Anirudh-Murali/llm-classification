@@ -1,0 +1,10 @@
+Definition: Claims about delays in processing, payments, or approvals that are waiting on departmental action. Includes pending payments, pending verifications, and lack of action from officers.
+
+Keywords:
+Payment delayed, Subsidy not received, Amount not credited, Money not received,
+Benefit pending, Fund pending, Treasury pending, Payment under process,
+Verification pending, Field verification pending, Panchanama not done,
+Inspection pending, Officer visit not done, File pending at Taluka,
+File pending at District, Approval pending, Signature pending,
+Officer not approving, Work pending for long time,
+No action taken, Delay from department

@@ -1,0 +1,10 @@
+Definition: Requests for information, guidance, or clarification. Users who don't know how to apply, track status, or what documents are needed.
+
+Keywords:
+How to apply, Application process not known,
+Which documents required, Eligibility criteria not clear,
+Am I eligible, Scheme details not known,
+Status not known, No update received,
+No SMS received, No message received,
+No confirmation received, No rejection reason shown,
+Where to contact, Helpline not responding, Guidance required

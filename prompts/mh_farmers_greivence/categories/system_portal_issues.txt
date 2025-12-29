@@ -1,0 +1,16 @@
+Definition: Issues related to the technical functioning of the portal, website, or app. includes login failures, OTP issues, submission errors, data upload failures, technical glitches, and display errors.
+
+Keywords:
+Portal not working, Website not opening, App crash, Login issue, OTP not received,
+Unable to submit application, Submit button not working, Page not loading,
+Session expired, Technical error shown, Server error, Internal error,
+Something went wrong, Form not saving, Data not saved, Application stuck,
+Upload failed, Document not uploaded, Attachment error, PDF not accepted,
+File size issue, File format issue, Eligible component not visible,
+Subsidy option missing, Scheme option missing, Wrong scheme shown,
+Aadhaar not seeded, Aadhaar mismatch, Aadhaar verification failed,
+Bank account mismatch, IFSC error, Account number incorrect,
+NPCI mapping failed, Duplicate application error,
+Already applied message, Application rejected as duplicate,
+Status not updated, Approved but not visible, Approval not reflecting,
+Data validation error
