@@ -9,6 +9,7 @@ from ..models.config import AppConfig
 from ..llm_clients.base import BaseLLMClient
 from ..llm_clients.ollama import OllamaClient
 from .prompt_manager import PromptManager
+from .text_utils import get_text_quality_issue
 
 logger = logging.getLogger(__name__)
 
@@ -45,8 +46,18 @@ class ClassificationOrchestrator:
 
     async def _classify_single(self, row: pd.Series) -> Dict[str, Any]:
         text = str(row[self.config.processing.comment_column])
-        if pd.isna(text) or text.strip() == "":
-            return {**row.to_dict(), "grievance_category": "unclassified", "reasoning": "empty"}
+        
+        # Check for text quality issues
+        quality_issue = get_text_quality_issue(text)
+        
+        if quality_issue:
+            # Skip LLM, return with null classification
+            logger.debug(f"Skipping classification due to: {quality_issue}")
+            return {
+                **row.to_dict(),
+                "grievance_category": None,
+                "reasoning": f"skipped_{quality_issue}"
+            }
 
         async with self.semaphore:
             result = await self.llm_client.aclassify(text, self.system_prompt)
