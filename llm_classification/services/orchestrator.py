@@ -108,27 +108,39 @@ class ClassificationOrchestrator:
 
         total_processed = processed_count
         
-        for chunk_df in reader:
-            tasks = []
-            for _, row in chunk_df.iterrows():
-                tasks.append(self._classify_single(row))
-            
-            results = await asyncio.gather(*tasks)
-            
-            # Convert to DataFrame
-            results_df = pd.DataFrame(results)
-            
-            # Append to output
-            header = not os.path.exists(self.config.output_file)
-            results_df.to_csv(
-                self.config.output_file, 
-                mode='a', 
-                header=header, 
-                index=False,
-                encoding=self.config.output_encoding
-            )
-            
-            total_processed += len(results)
-            print(f"Processed {total_processed} rows...")
+        # Get total lines for progress bar
+        total_rows = 0
+        try:
+            with open(self.config.input_file, 'r', encoding=self.config.input_encoding, errors='replace') as f:
+                total_rows = sum(1 for _ in f) - 1 # Subtract header
+        except Exception:
+            pass
 
+        # Adjust total for resume
+        remaining_rows = max(0, total_rows - processed_count)
+
+        with tqdm(total=total_rows, initial=processed_count, unit="row", desc="Classifying") as pbar:
+            for chunk_df in reader:
+                tasks = []
+                for _, row in chunk_df.iterrows():
+                    tasks.append(self._classify_single(row))
+                
+                results = await asyncio.gather(*tasks)
+                
+                # Convert to DataFrame
+                results_df = pd.DataFrame(results)
+                
+                # Append to output
+                header = not os.path.exists(self.config.output_file)
+                results_df.to_csv(
+                    self.config.output_file, 
+                    mode='a', 
+                    header=header, 
+                    index=False,
+                    encoding=self.config.output_encoding
+                )
+                
+                total_processed += len(results)
+                pbar.update(len(results))
+                
         logger.info("Classification completed.")
