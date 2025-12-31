@@ -9,6 +9,7 @@ class LLMConfig(BaseModel):
     temperature: float = 0.0
     top_p: float = 1.0
     top_k: int = 40
+    api_key: str = None
 
 class ProcessingConfig(BaseModel):
     checkpoint_interval: int = 20

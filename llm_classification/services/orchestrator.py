@@ -8,6 +8,8 @@ from tqdm.asyncio import tqdm
 from ..models.config import AppConfig
 from ..llm_clients.base import BaseLLMClient
 from ..llm_clients.ollama import OllamaClient
+from ..llm_clients.gemini import GeminiClient
+
 from .prompt_manager import PromptManager
 from .text_utils import get_text_quality_issue
 from ..models.response import ClassificationResponse, BatchClassificationResponse
@@ -26,6 +28,8 @@ class ClassificationOrchestrator:
     def _get_llm_client(self) -> BaseLLMClient:
         if self.config.llm.provider == "ollama":
             return OllamaClient(self.config.llm)
+        elif self.config.llm.provider == "gemini":
+            return GeminiClient(self.config.llm)
         else:
             raise ValueError(f"Unsupported provider: {self.config.llm.provider}")
 
