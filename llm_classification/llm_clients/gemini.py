@@ -14,7 +14,9 @@ class GeminiClient(BaseLLMClient):
             raise ValueError("API Key is required for Gemini provider")
         
         # Default to gemini-pro if not specified
-        model = self.config.model if self.config.model else "gemini-pro"
+        if self.config.model is None:
+            raise ValueError("Model is required for Gemini provider")
+        model = self.config.model
         self.api_url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={self.config.api_key}"
 
     async def aclassify(self, text: str, system_prompt: str, schema: Dict[str, Any] = None) -> Dict[str, Any]:
